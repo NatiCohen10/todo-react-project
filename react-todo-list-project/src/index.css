@@ -1,0 +1,173 @@
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: #fff;
+  color: #333;
+}
+.no-todos-paragraph {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0px;
+}
+
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.todo-list-item {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 3fr 1fr;
+}
+.complete.todo-item-name {
+  color: hsl(0, 0%, 45%);
+}
+.list-item-content,
+.delete-btn {
+  margin-bottom: 10px;
+}
+.todo-item-name {
+  font-size: 18px;
+}
+.custom-checkbox {
+  display: none;
+}
+
+.custom-checkbox + .custom-checkbox-label {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+}
+.content-card {
+  background-color: #ffffcc;
+  padding: 2em;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+}
+
+.custom-checkbox + .custom-checkbox-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  background-color: #fff;
+  border-radius: 3px; /* Optional: make it square or rounded */
+}
+.custom-checkbox + .custom-checkbox-label::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  clip-path: polygon(14% 44%, 0% 62%, 50% 100%, 100% 0%, 82% 0%, 42% 80%);
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+
+.custom-checkbox:checked + .custom-checkbox-label::before {
+  background-color: #2a70ff;
+  opacity: 0.7;
+}
+
+.custom-checkbox:checked + .custom-checkbox-label::after {
+  transform: scale(1);
+}
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 1em;
+  cursor: pointer;
+  transition: all 0.1s linear;
+}
+.delete-btn:hover {
+  transform: translateY(-4px);
+  background-color: hsl(0, 100%, 45%);
+}
+.add-todo-label {
+  font-size: 18px;
+  text-align: center;
+}
+.add-todo-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 1em;
+  cursor: pointer;
+  transition: all 0.1s linear;
+}
+.add-todo-form {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 2em;
+}
+.add-todo-btn:hover {
+  transform: translateY(-2px);
+  background-color: #45a049;
+}
+.add-todo-input {
+  padding: 0.6em;
+  margin-right: 1em;
+  border-radius: 4px;
+  border: 1px solid #333;
+  font-size: 16px;
+}
+.detail-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.progress-bar-label {
+  display: inline-block;
+  margin-block: 1em;
+  font-size: 18px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 25px;
+  appearance: none;
+}
+
+.progress-bar::-webkit-progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar::-webkit-progress-value {
+  background-color: rgb(42, 216, 109);
+  border-radius: 10px;
+  transition: width 0.2s ease;
+}
+
+.progress-bar:indeterminate {
+  background: repeating-linear-gradient(
+    -45deg,
+    #73a5ff,
+    #73a5ff 10px,
+    #e0e0e0 10px,
+    #e0e0e0 20px
+  );
+}
