@@ -1,17 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios"; // Import Axios
 
-const TODO_ITEMS = [
-  { id: "1", title: "Learn React", isComplete: false },
-  { id: "2", title: "Build a Todo App", isComplete: false },
-  { id: "3", title: "Read JavaScript Documentation", isComplete: true },
-  { id: "4", title: "Write Unit Tests", isComplete: false },
-  { id: "5", title: "Implement Context", isComplete: true },
-  { id: "6", title: "Create Portfolio Website", isComplete: false },
-  { id: "7", title: "Learn TypeScript", isComplete: false },
-  { id: "8", title: "Refactor Codebase", isComplete: true },
-  { id: "9", title: "Optimize Performance", isComplete: false },
-  { id: "10", title: "Deploy to Production", isComplete: true },
-];
+import TodoList from "./components/TodoList";
+import AddTodoForm from "./components/AddTodoForm";
+import TodoStatistics from "./components/TodoStatistics";
+import TodosFilter from "./components/TodosFilter";
 
 function makeId(length = 5) {
   let result = "";
@@ -25,29 +18,54 @@ function makeId(length = 5) {
 }
 
 function App() {
-  const [todos, setTodos] = useState(TODO_ITEMS);
-  const [newTodoName, setNewTodoName] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [searchItem, setSearchItem] = useState("");
+  const addTodoInputRef = useRef(null);
 
-  function addTodo(ev) {
-    ev.preventDefault();
-    const newTodo = {
-      id: makeId(5),
-      title: newTodoName,
-      isComplete: false,
-    };
-    const copyTodos = [...todos, newTodo];
-    setTodos(copyTodos);
-    setNewTodoName("");
+  useEffect(() => {
+    // console.log("hello");
+    fetchTodos();
+  }, []);
+
+  useEffect(() => {
+    // console.log(todos);
+  }, [todos]);
+
+  async function fetchTodos() {
+    try {
+      const response = await axios.get("http://localhost:8001/todo-items"); // Axios GET request
+      setTodos(response.data);
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    }
   }
 
-  function deleteTodo(todoId) {
+  async function deleteDBTodo(todoId) {
+    try {
+      await axios.delete(`http://localhost:8001/todo-items/${todoId}`); // Axios DELETE request
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function deleteTodo(todoId) {
     const copyTodos = todos.filter((todo) => todo.id !== todoId);
     setTodos(copyTodos);
+    await deleteDBTodo(todoId);
   }
 
-  function toggleTodoComplete(todoId) {
+  async function postNewTodo(newTodo) {
+    try {
+      await axios.post("http://localhost:8001/todo-items", newTodo); // Axios POST request
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function toggleTodoComplete(todoId) {
     const copyTodos = todos.map((todo) => {
       if (todo.id === todoId) {
+        updateTodo(todo);
         return { ...todo, isComplete: !todo.isComplete };
       }
       return todo;
@@ -55,93 +73,63 @@ function App() {
     setTodos(copyTodos);
   }
 
+  async function updateTodo(todo) {
+    try {
+      await axios.patch(`http://localhost:8001/todo-items/${todo.id}`, {
+        isComplete: !todo.isComplete,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function addTodo(ev) {
+    ev.preventDefault();
+    const newTodo = {
+      id: makeId(5),
+      title: addTodoInputRef.current.value,
+      isComplete: false,
+    };
+    addTodoInputRef.current.focus();
+    const copyTodos = [...todos, newTodo];
+    setTodos(copyTodos);
+    await postNewTodo(newTodo);
+    addTodoInputRef.current.value = "";
+  }
+
+  function filterTodos() {
+    if (searchItem === "") {
+      return todos; // Show all todos when input is empty
+    } else {
+      const filtered = todos.filter((todo) => {
+        return todo.title.toLowerCase().includes(searchItem.toLowerCase());
+      });
+      return filtered;
+    }
+  }
+  const filteredTodos = filterTodos();
+
   return (
     <div className="content-wrapper">
       <div className="content-card">
+        <h1>My Todos</h1>
+        <AddTodoForm addTodo={addTodo} addTodoInputRef={addTodoInputRef} />
+        <TodosFilter
+          filterTodos={filterTodos}
+          searchItem={searchItem}
+          setSearchItem={setSearchItem}
+        />
         {todos.length === 0 ? (
-          <>
-            <p className="no-todos-paragraph">No todos available</p>
-          </>
+          <p className="no-todos-paragraph">No todos available</p>
         ) : (
           <>
-            <form className="add-todo-form" onSubmit={addTodo}>
-              <label className="add-todo-label" htmlFor="todoAddInput">
-                Add a new todo:
-              </label>
-              <input
-                className="add-todo-input"
-                type="text"
-                id="todoAddInput"
-                value={newTodoName}
-                onChange={(ev) => {
-                  setNewTodoName(ev.target.value);
-                }}
-              />
-              <button className="add-todo-btn">Add todo</button>
-            </form>
-            <div>
-              <ul className="todo-wrapper">
-                {todos.map((todo) => (
-                  <li className="todo-list-item" key={todo.id}>
-                    <div className="list-item-content">
-                      <input
-                        type="checkbox"
-                        checked={todo.isComplete}
-                        id={todo.id}
-                        className={`${
-                          todo.isComplete ? "complete" : ""
-                        } todo-item-checkbox custom-checkbox`}
-                        onChange={() => {
-                          toggleTodoComplete(todo.id);
-                        }}
-                      />
-                      <label
-                        className={`${
-                          todo.isComplete ? "complete" : ""
-                        } todo-item-name custom-checkbox-label`}
-                        htmlFor={todo.id}
-                      >
-                        {todo.title}
-                      </label>
-                    </div>
-                    <button
-                      className="delete-btn"
-                      onClick={() => {
-                        deleteTodo(todo.id);
-                      }}
-                    >
-                      Delete todo
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <div className="detail-wrapper">
-                <p className="detail-paragraph">Total todos: {todos.length}</p>
-                <p className="detail-paragraph">
-                  Completed todos:
-                  {todos.filter((todo) => todo.isComplete === true).length}
-                </p>
-                <p className="detail-paragraph">
-                  Active Todos:
-                  {
-                    todos.filter((todo) => {
-                      return todo.isComplete === false;
-                    }).length
-                  }
-                </p>
-              </div>
-              <label className="progress-bar-label" htmlFor="progressBar">
-                Todos progress:
-              </label>
-              <progress
-                className="progress-bar"
-                id="progressBar"
-                value={todos.filter((todo) => todo.isComplete === true).length}
-                max={todos.length}
-              ></progress>
-            </div>
+            <TodoList
+              todos={filteredTodos}
+              setTodos={setTodos}
+              toggleTodoComplete={toggleTodoComplete}
+              deleteTodo={deleteTodo}
+            />
+            <TodoStatistics todos={filteredTodos} />
           </>
         )}
       </div>
