@@ -8,32 +8,22 @@
     {
       "id": "3",
       "title": "Read JavaScript Documentation",
-      "isComplete": true
-    },
-    {
-      "id": "4",
-      "title": "Write Unit Tests",
       "isComplete": false
     },
     {
       "id": "5",
       "title": "Implement Context",
-      "isComplete": true
+      "isComplete": false
     },
     {
       "id": "6",
       "title": "Create Portfolio Website",
-      "isComplete": false
-    },
-    {
-      "id": "7",
-      "title": "Learn TypeScript",
-      "isComplete": false
+      "isComplete": true
     },
     {
       "id": "8",
       "title": "Refactor Codebase",
-      "isComplete": true
+      "isComplete": false
     },
     {
       "id": "10",
@@ -41,14 +31,19 @@
       "isComplete": false
     },
     {
-      "id": "LHzon",
-      "title": "Learn React",
+      "id": "BX6g7",
+      "title": "Learn Typescript",
       "isComplete": true
     },
     {
-      "id": "lEbwE",
-      "title": "Do laundry",
+      "id": "UyeOw",
+      "title": "Add Debounce",
       "isComplete": true
+    },
+    {
+      "id": "h9vJU",
+      "title": "Debug the debounce",
+      "isComplete": false
     }
   ]
 }

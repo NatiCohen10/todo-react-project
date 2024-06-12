@@ -20,6 +20,27 @@ ul {
   align-items: center;
   justify-content: center;
 }
+.filterSectionWrapper{
+  display: flex;
+  gap: 8px;
+ flex-direction: column;
+  margin-bottom: 2em;
+}
+.nameFilterWrapper input{
+  padding: 0.6em;
+  margin-right: 1em;
+  border-radius: 4px;
+  border: 1px solid #333;
+  font-size: 16px;
+}
+.statusFilterWrapper{
+  display: flex;
+  
+  gap: 20px;
+}
+.statusFilterWrapper label{
+  font-size: 16px;
+}
 .todo-list-item {
   display: grid;
   align-items: center;

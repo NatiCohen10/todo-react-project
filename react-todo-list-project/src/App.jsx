@@ -20,20 +20,32 @@ function makeId(length = 5) {
 function App() {
   const [todos, setTodos] = useState([]);
   const [searchItem, setSearchItem] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [filteredTodos, setFilteredTodos] = useState([]);
   const addTodoInputRef = useRef(null);
 
   useEffect(() => {
-    // console.log("hello");
+    const debounceHandler = setTimeout(() => {
+      fetchTodos();
+      filterTodos();
+    }, 1000);
+
+    return () => {
+      clearTimeout(debounceHandler);
+    };
+  }, [searchItem]);
+
+  useEffect(() => {
     fetchTodos();
   }, []);
 
   useEffect(() => {
-    // console.log(todos);
-  }, [todos]);
+    filterTodos();
+  }, [statusFilter, todos]);
 
   async function fetchTodos() {
     try {
-      const response = await axios.get("http://localhost:8001/todo-items"); // Axios GET request
+      const response = await axios.get("http://localhost:8001/todo-items");
       setTodos(response.data);
     } catch (error) {
       console.error("Error fetching todos:", error);
@@ -98,16 +110,20 @@ function App() {
   }
 
   function filterTodos() {
-    if (searchItem === "") {
-      return todos; // Show all todos when input is empty
-    } else {
-      const filtered = todos.filter((todo) => {
-        return todo.title.toLowerCase().includes(searchItem.toLowerCase());
-      });
-      return filtered;
+    let filtered = todos.slice();
+    if (searchItem) {
+      filtered = filtered.filter((todo) =>
+        todo.title.toLowerCase().includes(searchItem.toLowerCase())
+      );
     }
+
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((todo) =>
+        statusFilter === "complete" ? todo.isComplete : !todo.isComplete
+      );
+    }
+    setFilteredTodos(() => filtered);
   }
-  const filteredTodos = filterTodos();
 
   return (
     <div className="content-wrapper">
@@ -118,6 +134,8 @@ function App() {
           filterTodos={filterTodos}
           searchItem={searchItem}
           setSearchItem={setSearchItem}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
         />
         {todos.length === 0 ? (
           <p className="no-todos-paragraph">No todos available</p>
