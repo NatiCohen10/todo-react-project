@@ -20,15 +20,14 @@ function makeId(length = 5) {
 function App() {
   const [todos, setTodos] = useState([]);
   const [searchItem, setSearchItem] = useState("");
+  const [debouncedSearchItem, setDebouncedSearchItem] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [filteredTodos, setFilteredTodos] = useState([]);
   const addTodoInputRef = useRef(null);
 
   useEffect(() => {
     const debounceHandler = setTimeout(() => {
-      fetchTodos();
-      filterTodos();
-    }, 1000);
+      setDebouncedSearchItem(searchItem);
+    }, 500);
 
     return () => {
       clearTimeout(debounceHandler);
@@ -41,7 +40,7 @@ function App() {
 
   useEffect(() => {
     filterTodos();
-  }, [statusFilter, todos]);
+  }, [statusFilter, todos, debouncedSearchItem]);
 
   async function fetchTodos() {
     try {
@@ -103,17 +102,17 @@ function App() {
       isComplete: false,
     };
     addTodoInputRef.current.focus();
-    const copyTodos = [...todos, newTodo];
+    const copyTodos = [newTodo, ...todos];
     setTodos(copyTodos);
     await postNewTodo(newTodo);
     addTodoInputRef.current.value = "";
   }
 
   function filterTodos() {
-    let filtered = todos.slice();
-    if (searchItem) {
+    let filtered = todos;
+    if (debouncedSearchItem) {
       filtered = filtered.filter((todo) =>
-        todo.title.toLowerCase().includes(searchItem.toLowerCase())
+        todo.title.toLowerCase().includes(debouncedSearchItem.toLowerCase())
       );
     }
 
@@ -122,9 +121,10 @@ function App() {
         statusFilter === "complete" ? todo.isComplete : !todo.isComplete
       );
     }
-    setFilteredTodos(() => filtered);
+    return filtered;
   }
 
+  const filteredTodos = filterTodos();
   return (
     <div className="content-wrapper">
       <div className="content-card">
@@ -147,7 +147,7 @@ function App() {
               toggleTodoComplete={toggleTodoComplete}
               deleteTodo={deleteTodo}
             />
-            <TodoStatistics todos={filteredTodos} />
+            <TodoStatistics todos={todos} />
           </>
         )}
       </div>

@@ -44,6 +44,21 @@
       "id": "h9vJU",
       "title": "Debug the debounce",
       "isComplete": false
+    },
+    {
+      "id": "vR903",
+      "title": "Write Unit Tests",
+      "isComplete": false
+    },
+    {
+      "id": "VNPM2",
+      "title": "Learn React",
+      "isComplete": false
+    },
+    {
+      "id": "fWJN2",
+      "title": "build",
+      "isComplete": false
     }
   ]
 }
