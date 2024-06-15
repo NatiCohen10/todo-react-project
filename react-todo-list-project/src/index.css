@@ -135,7 +135,7 @@ ul {
 }
 .add-todo-form {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 3fr 1fr;
   gap: 20px;
   align-items: center;
   margin-bottom: 2em;

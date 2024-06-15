@@ -1,6 +1,7 @@
 function TodoStatistics({ todos }) {
   return (
     <div>
+      <h2>Statistics</h2>
       <div className="detail-wrapper">
         <p className="detail-paragraph">Total todos: {todos.length}</p>
         <p className="detail-paragraph">

@@ -1,6 +1,6 @@
 import React from "react";
 
-function TodoItem({ todo, todos, setTodos, deleteTodo, toggleTodoComplete }) {
+function TodoItem({ todo, deleteTodo, toggleTodoComplete }) {
   return (
     <li className="todo-list-item" key={todo.id}>
       <div className="list-item-content">
@@ -12,7 +12,7 @@ function TodoItem({ todo, todos, setTodos, deleteTodo, toggleTodoComplete }) {
             todo.isComplete ? "complete" : ""
           } todo-item-checkbox custom-checkbox`}
           onChange={() => {
-            toggleTodoComplete(todo.id);
+            toggleTodoComplete(todo);
           }}
         />
         <label

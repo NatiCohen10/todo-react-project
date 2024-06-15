@@ -3,27 +3,22 @@
     {
       "id": "2",
       "title": "Build a Todo App",
-      "isComplete": true
+      "isComplete": false
     },
     {
       "id": "3",
       "title": "Read JavaScript Documentation",
-      "isComplete": false
+      "isComplete": true
     },
     {
       "id": "5",
       "title": "Implement Context",
-      "isComplete": false
+      "isComplete": true
     },
     {
       "id": "6",
       "title": "Create Portfolio Website",
       "isComplete": true
-    },
-    {
-      "id": "8",
-      "title": "Refactor Codebase",
-      "isComplete": false
     },
     {
       "id": "10",
@@ -56,8 +51,8 @@
       "isComplete": false
     },
     {
-      "id": "fWJN2",
-      "title": "build",
+      "id": "pUhEO",
+      "title": "Refactor Codebase",
       "isComplete": false
     }
   ]

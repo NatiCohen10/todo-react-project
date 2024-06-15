@@ -16,7 +16,7 @@ function TodosFilter({
             onChange={(ev) => {
               setSearchItem(ev.target.value);
             }}
-            type="text"
+            type="search"
             placeholder="Search todos..."
           />
         </div>

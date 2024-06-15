@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios"; // Import Axios
 
 import TodoList from "./components/TodoList";
@@ -22,6 +22,8 @@ function App() {
   const [searchItem, setSearchItem] = useState("");
   const [debouncedSearchItem, setDebouncedSearchItem] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const addTodoInputRef = useRef(null);
 
   useEffect(() => {
@@ -38,77 +40,7 @@ function App() {
     fetchTodos();
   }, []);
 
-  useEffect(() => {
-    filterTodos();
-  }, [statusFilter, todos, debouncedSearchItem]);
-
-  async function fetchTodos() {
-    try {
-      const response = await axios.get("http://localhost:8001/todo-items");
-      setTodos(response.data);
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    }
-  }
-
-  async function deleteDBTodo(todoId) {
-    try {
-      await axios.delete(`http://localhost:8001/todo-items/${todoId}`); // Axios DELETE request
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async function deleteTodo(todoId) {
-    const copyTodos = todos.filter((todo) => todo.id !== todoId);
-    setTodos(copyTodos);
-    await deleteDBTodo(todoId);
-  }
-
-  async function postNewTodo(newTodo) {
-    try {
-      await axios.post("http://localhost:8001/todo-items", newTodo); // Axios POST request
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async function toggleTodoComplete(todoId) {
-    const copyTodos = todos.map((todo) => {
-      if (todo.id === todoId) {
-        updateTodo(todo);
-        return { ...todo, isComplete: !todo.isComplete };
-      }
-      return todo;
-    });
-    setTodos(copyTodos);
-  }
-
-  async function updateTodo(todo) {
-    try {
-      await axios.patch(`http://localhost:8001/todo-items/${todo.id}`, {
-        isComplete: !todo.isComplete,
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async function addTodo(ev) {
-    ev.preventDefault();
-    const newTodo = {
-      id: makeId(5),
-      title: addTodoInputRef.current.value,
-      isComplete: false,
-    };
-    addTodoInputRef.current.focus();
-    const copyTodos = [newTodo, ...todos];
-    setTodos(copyTodos);
-    await postNewTodo(newTodo);
-    addTodoInputRef.current.value = "";
-  }
-
-  function filterTodos() {
+  const filteredTodos = useMemo(() => {
     let filtered = todos;
     if (debouncedSearchItem) {
       filtered = filtered.filter((todo) =>
@@ -122,34 +54,105 @@ function App() {
       );
     }
     return filtered;
+  }, [statusFilter, todos, debouncedSearchItem]);
+
+  async function fetchTodos() {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://localhost:8001/todo-items");
+      setTodos(response.data);
+      setError(null);
+    } catch (error) {
+      setError("cannot fetch data!");
+      console.error("Error fetching todos:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const filteredTodos = filterTodos();
+  async function deleteTodo(todoId) {
+    try {
+      await axios.delete(`http://localhost:8001/todo-items/${todoId}`);
+      setTodos((prevTodos) => {
+        return prevTodos.filter((todo) => todo.id !== todoId);
+      });
+    } catch (error) {
+      console.error(error);
+      alert("cant delete!");
+    }
+  }
+
+  async function toggleTodoComplete(todo) {
+    try {
+      await axios.patch(`http://localhost:8001/todo-items/${todo.id}`, {
+        isComplete: !todo.isComplete,
+      });
+      setTodos((prevTodos) => {
+        return prevTodos.map((currentTodo) => {
+          if (currentTodo.id === todo.id) {
+            return { ...currentTodo, isComplete: !currentTodo.isComplete };
+          }
+          return currentTodo;
+        });
+      });
+    } catch (error) {
+      console.error("Error updating todo:", error);
+      alert("cant toggle");
+    }
+  }
+
+  async function postNewTodo(newTodo) {
+    try {
+      // Axios POST request
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function addTodo(ev) {
+    try {
+      ev.preventDefault();
+      const newTodo = {
+        id: makeId(5),
+        title: addTodoInputRef.current.value,
+        isComplete: false,
+      };
+      await axios.post("http://localhost:8001/todo-items", newTodo);
+      setTodos((prevTodos) => {
+        return [...prevTodos, newTodo];
+      });
+      addTodoInputRef.current.value = "";
+      addTodoInputRef.current.focus();
+    } catch (error) {
+      console.error(error);
+      alert("cant add todo");
+    }
+  }
+
   return (
     <div className="content-wrapper">
       <div className="content-card">
         <h1>My Todos</h1>
         <AddTodoForm addTodo={addTodo} addTodoInputRef={addTodoInputRef} />
+
         <TodosFilter
-          filterTodos={filterTodos}
           searchItem={searchItem}
           setSearchItem={setSearchItem}
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
         />
-        {todos.length === 0 ? (
-          <p className="no-todos-paragraph">No todos available</p>
-        ) : (
-          <>
-            <TodoList
-              todos={filteredTodos}
-              setTodos={setTodos}
-              toggleTodoComplete={toggleTodoComplete}
-              deleteTodo={deleteTodo}
-            />
-            <TodoStatistics todos={todos} />
-          </>
-        )}
+
+        <>
+          <TodoList
+            todos={filteredTodos}
+            setTodos={setTodos}
+            toggleTodoComplete={toggleTodoComplete}
+            deleteTodo={deleteTodo}
+            loading={loading}
+            error={error}
+          />
+          <TodoStatistics todos={todos} />
+        </>
       </div>
     </div>
   );
