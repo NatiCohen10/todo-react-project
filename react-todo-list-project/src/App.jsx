@@ -182,7 +182,7 @@ function App() {
             setStatusFilter={setStatusFilter}
             loading={loading}
           />
-
+          <TodoStatistics todos={todos} loading={loading} />
           <>
             <TodoList
               todos={filteredTodos}
@@ -192,7 +192,6 @@ function App() {
               loading={loading}
               error={error}
             />
-            <TodoStatistics todos={todos} loading={loading} />
           </>
         </div>
       </div>

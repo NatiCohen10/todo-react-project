@@ -30,18 +30,22 @@ ul {
 
 .statusFilterWrapper {
   display: flex;
-
+  justify-content: space-between;
   gap: 20px;
 }
 .statusFilterWrapper label {
   font-size: 16px;
 }
 .todo-list-item {
-  display: grid;
+  display: flex;
   margin-bottom: 10px;
   align-items: center;
-  grid-template-columns: 3fr 1fr;
+  justify-content: space-between;
   word-break: break-word;
+}
+.item-info {
+  display: flex;
+  flex-direction: column;
 }
 .complete {
   color: hsl(0, 0%, 45%) !important;

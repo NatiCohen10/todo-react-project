@@ -19,7 +19,7 @@ function TodoStatistics({ todos, loading }) {
   }
 
   return (
-    <Card sx={{ marginTop: "1em" }}>
+    <Card sx={{ marginBottom: "1em" }}>
       <CardContent>
         {" "}
         <div>
