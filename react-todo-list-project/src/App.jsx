@@ -5,6 +5,8 @@ import TodoList from "./components/TodoList";
 import AddTodoForm from "./components/AddTodoForm";
 import TodoStatistics from "./components/TodoStatistics";
 import TodosFilter from "./components/TodosFilter";
+import { Alert, IconButton, Snackbar, Typography } from "@mui/material";
+import NavBar from "./components/NavBar";
 
 function makeId(length = 5) {
   let result = "";
@@ -24,6 +26,9 @@ function App() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState("");
+  const [message, setMessage] = useState("");
   const addTodoInputRef = useRef(null);
 
   useEffect(() => {
@@ -56,6 +61,19 @@ function App() {
     return filtered;
   }, [statusFilter, todos, debouncedSearchItem]);
 
+  function handleClose(event, reason) {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  }
+
+  function buildSnackbar(severity, message) {
+    setSeverity(severity);
+    setMessage(message);
+    setOpen(true);
+  }
+
   async function fetchTodos() {
     try {
       setLoading(true);
@@ -63,8 +81,7 @@ function App() {
       setTodos(response.data);
       setError(null);
     } catch (error) {
-      setError("cannot fetch data!");
-      console.error("Error fetching todos:", error);
+      buildSnackbar("error", "failed to fetch data from server");
     } finally {
       setLoading(false);
     }
@@ -76,9 +93,9 @@ function App() {
       setTodos((prevTodos) => {
         return prevTodos.filter((todo) => todo.id !== todoId);
       });
+      buildSnackbar("success", "todo deleted successfuly");
     } catch (error) {
-      console.error(error);
-      alert("cant delete!");
+      buildSnackbar("error", "couldn't delete todo, try again later");
     }
   }
 
@@ -95,17 +112,13 @@ function App() {
           return currentTodo;
         });
       });
-    } catch (error) {
-      console.error("Error updating todo:", error);
-      alert("cant toggle");
-    }
-  }
 
-  async function postNewTodo(newTodo) {
-    try {
-      // Axios POST request
+      buildSnackbar(
+        "success",
+        todo.isComplete ? "Unchecked todo" : "Checked todo"
+      );
     } catch (error) {
-      console.error(error);
+      buildSnackbar("error", "couldn't connect to server! try again later");
     }
   }
 
@@ -123,38 +136,67 @@ function App() {
       });
       addTodoInputRef.current.value = "";
       addTodoInputRef.current.focus();
+      buildSnackbar("success", "Todo Added Successfuly");
     } catch (error) {
-      console.error(error);
-      alert("cant add todo");
+      buildSnackbar("error", "couldn't connect to server! try again later");
     }
   }
 
   return (
-    <div className="content-wrapper">
-      <div className="content-card">
-        <h1>My Todos</h1>
-        <AddTodoForm addTodo={addTodo} addTodoInputRef={addTodoInputRef} />
-
-        <TodosFilter
-          searchItem={searchItem}
-          setSearchItem={setSearchItem}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-        />
-
-        <>
-          <TodoList
-            todos={filteredTodos}
-            setTodos={setTodos}
-            toggleTodoComplete={toggleTodoComplete}
-            deleteTodo={deleteTodo}
+    <>
+      <NavBar />
+      <div className="content-wrapper">
+        <div className="content-card">
+          <Snackbar
+            open={open}
+            autoHideDuration={2000}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert
+              onClose={handleClose}
+              severity={severity}
+              variant="filled"
+              sx={{ width: "100%" }}
+            >
+              {message}
+            </Alert>
+          </Snackbar>
+          <Typography
+            variant="h2"
+            component="h1"
+            sx={{ marginBottom: "0.5em" }}
+          >
+            My todos
+          </Typography>
+          <AddTodoForm
+            addTodo={addTodo}
+            addTodoInputRef={addTodoInputRef}
             loading={loading}
-            error={error}
           />
-          <TodoStatistics todos={todos} />
-        </>
+
+          <TodosFilter
+            searchItem={searchItem}
+            setSearchItem={setSearchItem}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            loading={loading}
+          />
+
+          <>
+            <TodoList
+              todos={filteredTodos}
+              setTodos={setTodos}
+              toggleTodoComplete={toggleTodoComplete}
+              deleteTodo={deleteTodo}
+              loading={loading}
+              error={error}
+            />
+            <TodoStatistics todos={todos} loading={loading} />
+          </>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

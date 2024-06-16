@@ -1,3 +1,13 @@
+import {
+  Card,
+  CardContent,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  Skeleton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
 
 function TodosFilter({
@@ -5,60 +15,66 @@ function TodosFilter({
   setSearchItem,
   statusFilter,
   setStatusFilter,
+  loading,
 }) {
   return (
     <>
-      <h2>Filter Todos</h2>
-      <div className="filterSectionWrapper">
-        <div className="nameFilterWrapper">
-          <input
-            value={searchItem}
-            onChange={(ev) => {
-              setSearchItem(ev.target.value);
-            }}
-            type="search"
-            placeholder="Search todos..."
-          />
-        </div>
-        <div className="statusFilterWrapper">
-          <label htmlFor="allItems">
-            <input
-              type="radio"
-              id="allItems"
-              value="all"
-              checked={statusFilter === "all"}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-              }}
-            />
-            All todos
-          </label>
-          <label htmlFor="completeItems">
-            <input
-              type="radio"
-              id="completeItems"
-              value="complete"
-              checked={statusFilter === "complete"}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-              }}
-            />
-            Complete todos
-          </label>
-          <label htmlFor="uncompleteItems">
-            <input
-              type="radio"
-              id="uncompleteItems"
-              value="uncomplete"
-              checked={statusFilter === "uncomplete"}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-              }}
-            />
-            Uncomplete todos
-          </label>
-        </div>
-      </div>
+      <Card sx={{ marginBlock: "1em" }}>
+        <CardContent>
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={{ fontWeight: "600", marginBottom: "0.25em" }}
+          >
+            Filter Todos
+          </Typography>
+
+          <div className="filterSectionWrapper">
+            <div className="nameFilterWrapper">
+              <TextField
+                value={searchItem}
+                onChange={(ev) => {
+                  setSearchItem(ev.target.value);
+                }}
+                label="Search Items..."
+                variant="standard"
+              />
+            </div>
+            <div className="statusFilterWrapper">
+              <FormControlLabel
+                value="all"
+                control={<Radio />}
+                label="All Items"
+                id="allItems"
+                checked={statusFilter === "all"}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                }}
+              />
+              <FormControlLabel
+                value="uncomplete"
+                control={<Radio />}
+                label="Active todos"
+                id="uncompleteItems"
+                checked={statusFilter === "uncomplete"}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                }}
+              />
+              <FormControlLabel
+                value="complete"
+                control={<Radio />}
+                label="Complete todos"
+                id="completeItems"
+                checked={statusFilter === "complete"}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </>
   );
 }
