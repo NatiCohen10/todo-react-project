@@ -29,6 +29,7 @@ function App() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState("");
   const [message, setMessage] = useState("");
+
   const addTodoInputRef = useRef(null);
 
   useEffect(() => {

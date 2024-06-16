@@ -9,6 +9,8 @@ function TodoList({
   toggleTodoComplete,
   loading,
   error,
+  isDialogOpen,
+  setIsDialogOpen,
 }) {
   if (loading) {
     const skeletonItems = [];

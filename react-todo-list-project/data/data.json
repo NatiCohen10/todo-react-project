@@ -1,15 +1,6 @@
 {
   "todo-items": [
     {
-      "id": "2",
-      "title": "Build a Todo App",
-      "isComplete": false,
-      "labels": [
-        "work",
-        "project"
-      ]
-    },
-    {
       "id": "3",
       "title": "Read JavaScript Documentation",
       "isComplete": true,
@@ -87,15 +78,6 @@
       "labels": [
         "study",
         "work"
-      ]
-    },
-    {
-      "id": "pUhEO",
-      "title": "Refactor Codebase",
-      "isComplete": false,
-      "labels": [
-        "work",
-        "development"
       ]
     }
   ]

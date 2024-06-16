@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   FormControlLabel,
@@ -16,6 +16,7 @@ import CodeIcon from "@mui/icons-material/Code";
 import UploadIcon from "@mui/icons-material/Upload";
 import QuizIcon from "@mui/icons-material/Quiz";
 import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
+import DeleteDialog from "./DeleteDialog";
 
 const StyledButton = styled(Button)(({ theme }) => ({
   padding: "8px 16px",
@@ -23,6 +24,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 function TodoItem({ todo, deleteTodo, toggleTodoComplete }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const todoLabels = todo.labels;
 
   return (
@@ -99,7 +101,8 @@ function TodoItem({ todo, deleteTodo, toggleTodoComplete }) {
       >
         <StyledButton
           onClick={() => {
-            deleteTodo(todo.id);
+            console.log(todo.id);
+            setIsDialogOpen(true);
           }}
           variant="contained"
           size="small"
@@ -109,6 +112,12 @@ function TodoItem({ todo, deleteTodo, toggleTodoComplete }) {
           Delete
         </StyledButton>
       </Tooltip>
+      <DeleteDialog
+        todoId={todo.id}
+        deleteTodo={deleteTodo}
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+      />
     </li>
   );
 }
