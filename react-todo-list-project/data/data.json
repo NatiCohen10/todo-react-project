@@ -3,6 +3,7 @@
     {
       "id": "3",
       "title": "Read JavaScript Documentation",
+      "description": "Study the JavaScript documentation thoroughly.",
       "isComplete": true,
       "labels": [
         "study",
@@ -12,6 +13,7 @@
     {
       "id": "5",
       "title": "Implement Context",
+      "description": "Integrate Context API into the application.",
       "isComplete": true,
       "labels": [
         "work",
@@ -21,6 +23,7 @@
     {
       "id": "6",
       "title": "Create Portfolio Website",
+      "description": "Develop a personal portfolio website to showcase projects.",
       "isComplete": true,
       "labels": [
         "project"
@@ -29,6 +32,7 @@
     {
       "id": "10",
       "title": "Deploy to Production",
+      "description": "Release the application to the live server.",
       "isComplete": false,
       "labels": [
         "work",
@@ -38,6 +42,7 @@
     {
       "id": "BX6g7",
       "title": "Learn Typescript",
+      "description": "Acquire knowledge of TypeScript programming language.",
       "isComplete": true,
       "labels": [
         "study",
@@ -47,6 +52,7 @@
     {
       "id": "UyeOw",
       "title": "Add Debounce",
+      "description": "Implement debounce functionality in user input handling.",
       "isComplete": true,
       "labels": [
         "work",
@@ -56,6 +62,7 @@
     {
       "id": "h9vJU",
       "title": "Debug the debounce",
+      "description": "Resolve issues related to debounce functionality in code.",
       "isComplete": false,
       "labels": [
         "work",
@@ -65,6 +72,7 @@
     {
       "id": "vR903",
       "title": "Write Unit Tests",
+      "description": "Create unit tests for the application components.",
       "isComplete": true,
       "labels": [
         "work",
@@ -74,6 +82,7 @@
     {
       "id": "VNPM2",
       "title": "Learn React",
+      "description": "Study and practice React library for building user interfaces.",
       "isComplete": false,
       "labels": [
         "study",

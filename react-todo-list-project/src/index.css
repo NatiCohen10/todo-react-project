@@ -37,7 +37,6 @@ ul {
   font-size: 16px;
 }
 .todo-list-item {
-  display: flex;
   margin-bottom: 10px;
   align-items: center;
   justify-content: space-between;
@@ -187,4 +186,8 @@ ul {
 
 .MuiButton-contained {
   padding: 20px;
+}
+.todo-description {
+  max-width: 250px;
+  margin-bottom: 0.5em;
 }

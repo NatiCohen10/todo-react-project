@@ -29,8 +29,10 @@ function App() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState("");
   const [message, setMessage] = useState("");
-
+  const [addingTodo, setAddingTodo] = useState(false);
+  const [selectedLabels, setSelectedLabels] = useState([]);
   const addTodoInputRef = useRef(null);
+  const addTodoDescRef = useRef(null);
 
   useEffect(() => {
     const debounceHandler = setTimeout(() => {
@@ -44,6 +46,7 @@ function App() {
 
   useEffect(() => {
     fetchTodos();
+    console.log(todos);
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -126,20 +129,28 @@ function App() {
   async function addTodo(ev) {
     try {
       ev.preventDefault();
+      setAddingTodo(true);
       const newTodo = {
         id: makeId(5),
         title: addTodoInputRef.current.value,
+        description: addTodoDescRef.current.value,
         isComplete: false,
+        labels: ["work", "study"],
       };
       await axios.post("http://localhost:8001/todo-items", newTodo);
       setTodos((prevTodos) => {
         return [...prevTodos, newTodo];
       });
       addTodoInputRef.current.value = "";
+      addTodoDescRef.current.value = "";
       addTodoInputRef.current.focus();
+      setSelectedLabels([]);
       buildSnackbar("success", "Todo Added Successfuly");
     } catch (error) {
       buildSnackbar("error", "couldn't connect to server! try again later");
+      console.log(error);
+    } finally {
+      setAddingTodo(false);
     }
   }
 
@@ -173,7 +184,10 @@ function App() {
           <AddTodoForm
             addTodo={addTodo}
             addTodoInputRef={addTodoInputRef}
-            loading={loading}
+            loading={addingTodo}
+            selectedLabels={selectedLabels}
+            setSelectedLabels={setSelectedLabels}
+            addTodoDescRef={addTodoDescRef}
           />
 
           <TodosFilter
