@@ -1,14 +1,23 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios"; // Import Axios
-import NavBar from "./components/NavBar";
-import { Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import TodoPage from "./pages/TodoPage";
-import TodoDetailsPage from "./pages/TodoDetailsPage";
-import CreateTodoPage from "./pages/CreateTodoPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import TodoList from "../components/TodoList";
+import AddTodoForm from "../components/AddTodoForm";
+import TodoStatistics from "../components/TodoStatistics";
+import TodosFilter from "../components/TodosFilter";
+import { Alert, IconButton, Snackbar, Typography } from "@mui/material";
 
-function App() {
+function makeId(length = 5) {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+function TodoPage() {
   const [todos, setTodos] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const [debouncedSearchItem, setDebouncedSearchItem] = useState("");
@@ -35,7 +44,6 @@ function App() {
 
   useEffect(() => {
     fetchTodos();
-    console.log(todos);
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -154,89 +162,60 @@ function App() {
       buildSnackbar("success", "Todo Added Successfuly");
     } catch (error) {
       buildSnackbar("error", "couldn't connect to server! try again later");
-      console.log(error);
     } finally {
       setAddingTodo(false);
     }
   }
   return (
     <>
-      <NavBar />
-      <div className="contet-wrapper test-div">
-        <div className="content-card">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/todo">
-              <Route index element={<TodoPage />} />
-              <Route path=":todoId" element={<TodoDetailsPage />} />
-              <Route path="create" element={<CreateTodoPage />} />
-            </Route>
-            <Route path="/*" element={<NotFoundPage />} />
-          </Routes>
-        </div>
-      </div>
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
+      <Typography variant="h2" component="h1" sx={{ marginBottom: "0.5em" }}>
+        My todos
+      </Typography>
+      <AddTodoForm
+        addTodo={addTodo}
+        addTodoInputRef={addTodoInputRef}
+        loading={addingTodo}
+        selectedLabels={selectedLabels}
+        setSelectedLabels={setSelectedLabels}
+        addTodoDescRef={addTodoDescRef}
+      />
+      <TodoStatistics todos={todos} loading={loading} />
+
+      <TodosFilter
+        searchItem={searchItem}
+        setSearchItem={setSearchItem}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        loading={loading}
+      />
+
+      <>
+        <TodoList
+          todos={filteredTodos}
+          setTodos={setTodos}
+          toggleTodoComplete={toggleTodoComplete}
+          deleteTodo={deleteTodo}
+          loading={loading}
+          error={error}
+        />
+      </>
     </>
   );
-
-  // return (
-  //   <>
-  //     <NavBar />
-  //     <div className="content-wrapper">
-  //       <div className="content-card">
-  //         <Snackbar
-  //           open={open}
-  //           autoHideDuration={2000}
-  //           onClose={handleClose}
-  //           anchorOrigin={{ vertical: "top", horizontal: "center" }}
-  //         >
-  //           <Alert
-  //             onClose={handleClose}
-  //             severity={severity}
-  //             variant="filled"
-  //             sx={{ width: "100%" }}
-  //           >
-  //             {message}
-  //           </Alert>
-  //         </Snackbar>
-  //         <Typography
-  //           variant="h2"
-  //           component="h1"
-  //           sx={{ marginBottom: "0.5em" }}
-  //         >
-  //           My todos
-  //         </Typography>
-  //         <AddTodoForm
-  //           addTodo={addTodo}
-  //           addTodoInputRef={addTodoInputRef}
-  //           loading={addingTodo}
-  //           selectedLabels={selectedLabels}
-  //           setSelectedLabels={setSelectedLabels}
-  //           addTodoDescRef={addTodoDescRef}
-  //         />
-  //         <TodoStatistics todos={todos} loading={loading} />
-
-  //         <TodosFilter
-  //           searchItem={searchItem}
-  //           setSearchItem={setSearchItem}
-  //           statusFilter={statusFilter}
-  //           setStatusFilter={setStatusFilter}
-  //           loading={loading}
-  //         />
-
-  //         <>
-  //           <TodoList
-  //             todos={filteredTodos}
-  //             setTodos={setTodos}
-  //             toggleTodoComplete={toggleTodoComplete}
-  //             deleteTodo={deleteTodo}
-  //             loading={loading}
-  //             error={error}
-  //           />
-  //         </>
-  //       </div>
-  //     </div>
-  //   </>
-  // );
 }
 
-export default App;
+export default TodoPage;

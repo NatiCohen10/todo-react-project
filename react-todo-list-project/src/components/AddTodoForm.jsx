@@ -5,7 +5,6 @@ import {
   CardContent,
   TextField,
   Tooltip,
-  CircularProgress,
   Typography,
   Autocomplete,
   Chip,
@@ -33,19 +32,22 @@ function AddTodoForm({
     <Card>
       <CardContent>
         <form className="add-todo-form">
-          <TextField
-            id="todoAddInput"
-            inputRef={addTodoInputRef}
-            required
-            label="Add new todo"
-            variant="filled"
-          />
-
-          <TextField
-            inputRef={addTodoDescRef}
-            required
-            label="Add todo description"
-          ></TextField>
+          <div>
+            <TextField
+              id="todoAddInput"
+              inputRef={addTodoInputRef}
+              required
+              label="Add new todo"
+              variant="filled"
+              sx={{ width: "100%", marginBottom: "0.5em" }}
+            />
+            <TextField
+              inputRef={addTodoDescRef}
+              required
+              label="Add todo description"
+              sx={{ width: "100%" }}
+            ></TextField>
+          </div>
 
           <Tooltip
             title="Add"

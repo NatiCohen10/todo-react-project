@@ -15,11 +15,18 @@ function TodoStatistics({ todos, loading }) {
   const progress = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
   if (loading) {
-    return <Skeleton variant="rectangular" width={210} height={60} />;
+    return (
+      <Skeleton
+        variant="rectangular"
+        width={"100%"}
+        height={60}
+        sx={{ marginTop: "1em" }}
+      />
+    );
   }
 
   return (
-    <Card sx={{ marginBottom: "1em" }}>
+    <Card sx={{ marginTop: "1em" }}>
       <CardContent>
         {" "}
         <div>

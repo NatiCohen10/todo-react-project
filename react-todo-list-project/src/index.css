@@ -191,3 +191,23 @@ ul {
   max-width: 250px;
   margin-bottom: 0.5em;
 }
+.nav-text {
+  text-decoration: none;
+  color: white;
+}
+
+.active {
+  color: red;
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
+.test-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+.individual-todo-title {
+  display: flex;
+  gap: 5px;
+}

@@ -9,34 +9,42 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { blue, grey, purple, red } from "@mui/material/colors";
+import { Link, NavLink } from "react-router-dom";
 
-const navItems = ["Home", "About", "Todo", "Activity"]; // Define your nav items here
-
-function handleDrawerToggle() {
-  // Handle drawer toggle logic here
-  console.log("Drawer toggle clicked");
+function TopNavLink(props) {
+  const { href, children } = props;
+  return (
+    <NavLink
+      className={({ isActive }) => {
+        return isActive ? "active nav-text" : "nav-text";
+      }}
+      to={href}
+    >
+      {children}
+    </NavLink>
+  );
 }
 
 function NavBar() {
   return (
     <>
-      <Box sx={{ display: "flex", backgroundColor: "black" }}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar component="nav">
+        <AppBar sx={{ backgroundColor: blue.A400 }} component="nav">
           <Toolbar>
             <Typography
               variant="h6"
               component="div"
               sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
             >
-              MUI
+              <TopNavLink href="/">Todos</TopNavLink>
             </Typography>
             <Box sx={{ display: { sm: "block" } }}>
-              {navItems.map((item) => (
-                <Button key={item} sx={{ color: "#fff" }}>
-                  {item}
-                </Button>
-              ))}
+              <Button sx={{ color: "#fff" }}>
+                <Typography variant="h6" component="div"></Typography>
+                <TopNavLink href="todo">todo</TopNavLink>
+              </Button>
             </Box>
           </Toolbar>
         </AppBar>

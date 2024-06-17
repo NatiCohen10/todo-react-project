@@ -20,7 +20,8 @@ import DeleteDialog from "./DeleteDialog";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import { ExpandMore } from "@mui/icons-material";
+import { ExpandMore, Info } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const StyledButton = styled(Button)(({ theme }) => ({
   padding: "8px 16px",
@@ -57,6 +58,7 @@ function TodoItem({ todo, deleteTodo, toggleTodoComplete }) {
                   <Checkbox
                     checked={todo.isComplete}
                     id={todo.id}
+                    onClick={(event) => event.stopPropagation()}
                     onChange={handleCheckboxChange}
                     sx={{
                       paddingRight: "10px",
@@ -69,6 +71,7 @@ function TodoItem({ todo, deleteTodo, toggleTodoComplete }) {
                     {todo.title}
                   </span>
                 }
+                onClick={(event) => event.stopPropagation()}
               />
             </AccordionSummary>
             <AccordionDetails
@@ -87,33 +90,58 @@ function TodoItem({ todo, deleteTodo, toggleTodoComplete }) {
                   ))}
                 </div>
               </div>
-              <Tooltip
-                title="Delete"
-                arrow
-                PopperProps={{
-                  modifiers: [
-                    {
-                      name: "offset",
-                      options: {
-                        offset: [0, -14],
+
+              <div>
+                <Tooltip
+                  title="info"
+                  arrow
+                  PopperProps={{
+                    modifiers: [
+                      {
+                        name: "offset",
+                        options: {
+                          offset: [0, -14],
+                        },
                       },
-                    },
-                  ],
-                }}
-              >
-                <StyledButton
-                  onClick={() => {
-                    console.log(todo.id);
-                    setIsDialogOpen(true);
+                    ],
                   }}
-                  variant="contained"
-                  size="small"
-                  color="error"
-                  startIcon={<DeleteIcon />}
                 >
-                  Delete
-                </StyledButton>
-              </Tooltip>
+                  <Button
+                    component={Link}
+                    to={`/todo/${todo.id}`}
+                    variant="text"
+                  >
+                    <Info />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title="Delete"
+                  arrow
+                  PopperProps={{
+                    modifiers: [
+                      {
+                        name: "offset",
+                        options: {
+                          offset: [0, -14],
+                        },
+                      },
+                    ],
+                  }}
+                >
+                  <StyledButton
+                    onClick={() => {
+                      console.log(todo.id);
+                      setIsDialogOpen(true);
+                    }}
+                    variant="contained"
+                    size="small"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                  >
+                    Delete
+                  </StyledButton>
+                </Tooltip>
+              </div>
             </AccordionDetails>
           </Accordion>
         </div>
