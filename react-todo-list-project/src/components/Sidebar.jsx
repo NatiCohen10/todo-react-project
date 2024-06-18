@@ -17,8 +17,8 @@ const Sidebar = () => {
       }}
     >
       <List>
-        <ListItem button component={Link} to="/todo">
-          <ListItemText primary="Todo List" />
+        <ListItem button component={Link} to="/">
+          <ListItemText primary="Home" />
         </ListItem>
         {/* Add more list items as needed */}
       </List>

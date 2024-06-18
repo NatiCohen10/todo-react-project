@@ -8,6 +8,7 @@ import TodoDetailsPage from "./pages/TodoDetailsPage";
 import CreateTodoPage from "./pages/CreateTodoPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import TodoLayout from "./pages/TodoLayout";
+import Layout from "./components/Layout";
 
 function App() {
   return (
@@ -17,10 +18,13 @@ function App() {
         <div className="content-card">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/todo" element={<TodoPage />}>
-              <Route path="create" element={<CreateTodoPage />} />
+            <Route path="/todo" element={<TodoLayout />}>
+              <Route index element={<TodoPage />} />
+              <Route path="create" element={<TodoPage />}>
+                <Route index element={<CreateTodoPage />} />
+              </Route>
+              <Route path=":todoId" element={<TodoDetailsPage />} />
             </Route>
-            <Route path="/todo/:todoId" element={<TodoDetailsPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </div>
