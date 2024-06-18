@@ -13,21 +13,8 @@ import {
 } from "react-router-dom";
 import CreateTodoPage from "./CreateTodoPage";
 
-function makeId(length = 5) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
-
 function TodoPage() {
   const [todos, setTodos] = useState([]);
-  const [searchItem, setSearchItem] = useState("");
-  const [debouncedSearchItem, setDebouncedSearchItem] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -44,16 +31,6 @@ function TodoPage() {
   });
   const q = searchParams.get("q");
   const statusFilter = searchParams.get("status");
-
-  // useEffect(() => {
-  //   const debounceHandler = setTimeout(() => {
-  //     setDebouncedSearchItem(searchItem);
-  //   }, 500);
-
-  //   return () => {
-  //     clearTimeout(debounceHandler);
-  //   };
-  // }, [searchItem]);
 
   useEffect(() => {
     fetchTodos();
@@ -184,10 +161,7 @@ function TodoPage() {
       <TodoStatistics todos={todos} loading={loading} />
 
       <TodosFilter
-        searchItem={searchItem}
-        setSearchItem={setSearchItem}
         statusFilter={statusFilter}
-        searchParams={searchParams}
         setSearchParams={setSearchParams}
         q={q}
       />

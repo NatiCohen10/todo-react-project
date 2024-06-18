@@ -9,17 +9,8 @@ import {
   Skeleton,
 } from "@mui/material";
 
-function TodosFilter({
-  searchItem,
-  setSearchItem,
-  statusFilter,
-  setStatusFilter,
-  searchParams,
-  setSearchParams,
-  q,
-}) {
+function TodosFilter({ statusFilter, setSearchParams, q }) {
   const handleTabChange = (event, newValue) => {
-    // setStatusFilter(newValue);
     setSearchParams((prev) => {
       prev.set("status", newValue);
       return prev;
