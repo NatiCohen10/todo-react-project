@@ -4,7 +4,9 @@ import TodoList from "../components/TodoList";
 import AddTodoForm from "../components/AddTodoForm";
 import TodoStatistics from "../components/TodoStatistics";
 import TodosFilter from "../components/TodosFilter";
-import { Alert, IconButton, Snackbar, Typography } from "@mui/material";
+import { Alert, Button, IconButton, Snackbar, Typography } from "@mui/material";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import CreateTodoPage from "./CreateTodoPage";
 
 function makeId(length = 5) {
   let result = "";
@@ -27,10 +29,10 @@ function TodoPage() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState("");
   const [message, setMessage] = useState("");
-  const [addingTodo, setAddingTodo] = useState(false);
-  const [selectedLabels, setSelectedLabels] = useState([]);
   const addTodoInputRef = useRef(null);
   const addTodoDescRef = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const debounceHandler = setTimeout(() => {
@@ -44,7 +46,7 @@ function TodoPage() {
 
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [location.pathname]);
 
   const filteredTodos = useMemo(() => {
     let filtered = todos;
@@ -133,38 +135,43 @@ function TodoPage() {
     return false;
   }
 
-  async function addTodo(ev) {
-    try {
-      ev.preventDefault();
-      if (validateNewTodo()) {
-        buildSnackbar(
-          "error",
-          "please fill all of the required fields before adding a todo!"
-        );
-        return;
-      }
-      setAddingTodo(true);
-      const newTodo = {
-        id: makeId(5),
-        title: addTodoInputRef.current.value,
-        description: addTodoDescRef.current.value,
-        isComplete: false,
-        labels: ["work", "study"],
-      };
-      await axios.post("http://localhost:8001/todo-items", newTodo);
-      setTodos((prevTodos) => {
-        return [...prevTodos, newTodo];
-      });
-      addTodoInputRef.current.value = "";
-      addTodoDescRef.current.value = "";
-      addTodoInputRef.current.focus();
-      setSelectedLabels([]);
-      buildSnackbar("success", "Todo Added Successfuly");
-    } catch (error) {
-      buildSnackbar("error", "couldn't connect to server! try again later");
-    } finally {
-      setAddingTodo(false);
-    }
+  // async function addTodo(ev) {
+  //   try {
+  //     ev.preventDefault();
+  //     if (validateNewTodo()) {
+  //       buildSnackbar(
+  //         "error",
+  //         "please fill all of the required fields before adding a todo!"
+  //       );
+  //       return;
+  //     }
+  //     setAddingTodo(true);
+  //     const newTodo = {
+  //       title: addTodoInputRef.current.value,
+  //       description: addTodoDescRef.current.value,
+  //       isComplete: false,
+  //       labels: ["work", "study"],
+  //     };
+  //     await axios.post("http://localhost:8001/todo-items", newTodo);
+  //     setTodos((prevTodos) => {
+  //       return [...prevTodos, newTodo];
+  //     });
+  //     addTodoInputRef.current.value = "";
+  //     addTodoDescRef.current.value = "";
+  //     addTodoInputRef.current.focus();
+  //     setSelectedLabels([]);
+  //     buildSnackbar("success", "Todo Added Successfuly");
+  //   } catch (error) {
+  //     buildSnackbar("error", "couldn't connect to server! try again later");
+  //   } finally {
+  //     setAddingTodo(false);
+  //   }
+  // }
+
+  const isCreating = location.pathname === "/todo/create";
+
+  function handleCloseModal() {
+    navigate(-1);
   }
   return (
     <>
@@ -186,14 +193,16 @@ function TodoPage() {
       <Typography variant="h2" component="h1" sx={{ marginBottom: "0.5em" }}>
         My todos
       </Typography>
-      <AddTodoForm
-        addTodo={addTodo}
-        addTodoInputRef={addTodoInputRef}
-        loading={addingTodo}
-        selectedLabels={selectedLabels}
-        setSelectedLabels={setSelectedLabels}
-        addTodoDescRef={addTodoDescRef}
-      />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          navigate("/todo/create");
+        }}
+      >
+        Add todo
+      </Button>
+
       <TodoStatistics todos={todos} loading={loading} />
 
       <TodosFilter
@@ -214,6 +223,23 @@ function TodoPage() {
           error={error}
         />
       </>
+      {isCreating && (
+        <CreateTodoPage
+          openDialog={isCreating}
+          buildSnackbar={buildSnackbar}
+          handleClose={handleCloseModal}
+          validateNewTodo={validateNewTodo}
+          severity={severity}
+          setSeverity={setSeverity}
+          open={open}
+          setOpen={setOpen}
+          message={message}
+          setMessage={setMessage}
+          addTodoInputRef={addTodoInputRef}
+          addTodoDescRef={addTodoDescRef}
+        />
+      )}
+      <Outlet />
     </>
   );
 }
