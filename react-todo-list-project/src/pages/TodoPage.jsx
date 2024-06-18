@@ -61,9 +61,9 @@ function TodoPage() {
 
   const filteredTodos = useMemo(() => {
     let filtered = todos;
-    if (q.trim() !== "") {
-      filtered = filtered.filter((todo) => {
-        return todo.title.toLowerCase().includes(q.toLowerCase());
+    if (q?.trim() !== "") {
+      filtered = filtered?.filter((todo) => {
+        return todo.title?.toLowerCase().includes(q?.toLowerCase());
       });
     }
 

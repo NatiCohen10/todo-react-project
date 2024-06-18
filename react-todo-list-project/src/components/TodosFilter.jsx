@@ -54,7 +54,7 @@ function TodosFilter({
             </div>
             <div className="statusFilterWrapper">
               <Tabs
-                value={statusFilter}
+                value={statusFilter || "all"}
                 onChange={handleTabChange}
                 aria-label="filter tabs"
                 sx={{ width: "100%" }}

@@ -132,7 +132,7 @@ function TodoDetailsPage() {
         </Alert>
       </Snackbar>
 
-      <Card sx={{ height: "50vh", padding: "1em" }}>
+      <Card sx={{ padding: "1em" }}>
         <CardContent
           sx={{
             display: "flex",

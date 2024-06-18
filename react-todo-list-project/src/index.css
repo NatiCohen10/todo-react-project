@@ -214,3 +214,9 @@ ul {
 .css-1kvbz7q-MuiButtonBase-root-MuiChip-root .MuiChip-icon {
   color: white !important;
 }
+.chip-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 1em;
+  gap: 5px;
+}

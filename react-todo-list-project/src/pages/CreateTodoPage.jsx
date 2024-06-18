@@ -94,7 +94,7 @@ function CreateTodoPage({
           {message}
         </Alert>
       </Snackbar>
-      <Dialog open={openDialog} onClose={handleClose}>
+      <Dialog open={openDialog || false} onClose={handleClose}>
         <DialogTitle>Create New Todo</DialogTitle>
         <DialogContent>
           <IconButton
