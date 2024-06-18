@@ -211,3 +211,6 @@ ul {
   display: flex;
   justify-content: space-between;
 }
+.css-1kvbz7q-MuiButtonBase-root-MuiChip-root .MuiChip-icon {
+  color: white !important;
+}

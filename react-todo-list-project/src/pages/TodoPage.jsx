@@ -5,7 +5,12 @@ import AddTodoForm from "../components/AddTodoForm";
 import TodoStatistics from "../components/TodoStatistics";
 import TodosFilter from "../components/TodosFilter";
 import { Alert, Button, IconButton, Snackbar, Typography } from "@mui/material";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import CreateTodoPage from "./CreateTodoPage";
 
 function makeId(length = 5) {
@@ -23,7 +28,6 @@ function TodoPage() {
   const [todos, setTodos] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const [debouncedSearchItem, setDebouncedSearchItem] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -34,15 +38,22 @@ function TodoPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const debounceHandler = setTimeout(() => {
-      setDebouncedSearchItem(searchItem);
-    }, 500);
+  const [searchParams, setSearchParams] = useSearchParams({
+    q: "",
+    status: "all",
+  });
+  const q = searchParams.get("q");
+  const statusFilter = searchParams.get("status");
 
-    return () => {
-      clearTimeout(debounceHandler);
-    };
-  }, [searchItem]);
+  // useEffect(() => {
+  //   const debounceHandler = setTimeout(() => {
+  //     setDebouncedSearchItem(searchItem);
+  //   }, 500);
+
+  //   return () => {
+  //     clearTimeout(debounceHandler);
+  //   };
+  // }, [searchItem]);
 
   useEffect(() => {
     fetchTodos();
@@ -50,10 +61,10 @@ function TodoPage() {
 
   const filteredTodos = useMemo(() => {
     let filtered = todos;
-    if (debouncedSearchItem) {
-      filtered = filtered.filter((todo) =>
-        todo.title.toLowerCase().includes(debouncedSearchItem.toLowerCase())
-      );
+    if (q.trim() !== "") {
+      filtered = filtered.filter((todo) => {
+        return todo.title.toLowerCase().includes(q.toLowerCase());
+      });
     }
 
     if (statusFilter !== "all") {
@@ -62,7 +73,7 @@ function TodoPage() {
       );
     }
     return filtered;
-  }, [statusFilter, todos, debouncedSearchItem]);
+  }, [statusFilter, todos, q]);
 
   function handleClose(event, reason) {
     if (reason === "clickaway") {
@@ -176,8 +187,9 @@ function TodoPage() {
         searchItem={searchItem}
         setSearchItem={setSearchItem}
         statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        loading={loading}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+        q={q}
       />
 
       <>

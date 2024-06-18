@@ -88,6 +88,16 @@
         "study",
         "work"
       ]
+    },
+    {
+      "id": "f501",
+      "title": "Do laundry",
+      "description": "dasdasd",
+      "isComplete": true,
+      "labels": [
+        "work",
+        "study"
+      ]
     }
   ]
 }

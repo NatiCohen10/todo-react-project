@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -10,11 +11,31 @@ import {
   Snackbar,
   TextField,
   Tooltip,
+  chipClasses,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close"; // Import CloseIcon
 import axios from "axios";
+import ClassIcon from "@mui/icons-material/Class";
+import BadgeIcon from "@mui/icons-material/Badge";
+import CodeIcon from "@mui/icons-material/Code";
+import UploadIcon from "@mui/icons-material/Upload";
+import QuizIcon from "@mui/icons-material/Quiz";
+import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
+
+const labelIconArray = [
+  { key: "study", label: "Study", icon: <ClassIcon /> },
+  { key: "work", label: "Work", icon: <BadgeIcon /> },
+  { key: "deployment", label: "Deployment", icon: <UploadIcon /> },
+  { key: "project", label: "Project", icon: <CodeIcon /> },
+  { key: "testing", label: "Testing", icon: <QuizIcon /> },
+  {
+    key: "development",
+    label: "Development",
+    icon: <IntegrationInstructionsIcon />,
+  },
+];
 
 function CreateTodoPage({
   openDialog,
@@ -26,10 +47,8 @@ function CreateTodoPage({
   severity,
   message,
   open,
-  setOpen,
-  setSeverity,
-  setMessage,
 }) {
+  const [chipArr, setChipArr] = useState([]);
   async function handleAddTodo(ev) {
     ev.preventDefault();
     try {
@@ -40,13 +59,21 @@ function CreateTodoPage({
         title: addTodoInputRef.current.value,
         description: addTodoDescRef.current.value,
         isComplete: false,
-        labels: ["work", "study"],
+        labels: chipArr,
       };
       await axios.post("http://localhost:8001/todo-items", newTodo);
       buildSnackbar("success", "Todo Added Successfully");
       handleClose();
     } catch (error) {
       buildSnackbar("error", "Couldn't connect to server! Try again later");
+    }
+  }
+
+  function handleChipClick(chipKey) {
+    if (chipArr.includes(chipKey)) {
+      setChipArr(chipArr.filter((key) => key !== chipKey));
+    } else {
+      setChipArr([...chipArr, chipKey]);
     }
   }
 
@@ -101,6 +128,31 @@ function CreateTodoPage({
                     label="Add todo description"
                     sx={{ width: "100%" }}
                   />
+                  <div className="chip-wrapper">
+                    {labelIconArray.map((item) => (
+                      <Chip
+                        key={item.key}
+                        icon={item.icon}
+                        label={item.label}
+                        onClick={() => handleChipClick(item.key)}
+                        sx={{
+                          marginRight: "0.5em",
+                          marginBottom: "0.5em",
+                          backgroundColor: chipArr.includes(item.key)
+                            ? "#1976d2" // Blue background color for selected chips
+                            : undefined,
+                          color: chipArr.includes(item.key)
+                            ? "white" // White text color for selected chips
+                            : undefined,
+                          "&:hover": {
+                            backgroundColor: chipArr.includes(item.key)
+                              ? "#1976d2"
+                              : "#e0e0e0", // Light gray background color on hover
+                          },
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
                 <Tooltip
                   title="Add"

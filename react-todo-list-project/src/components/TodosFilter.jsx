@@ -14,10 +14,16 @@ function TodosFilter({
   setSearchItem,
   statusFilter,
   setStatusFilter,
-  loading,
+  searchParams,
+  setSearchParams,
+  q,
 }) {
   const handleTabChange = (event, newValue) => {
-    setStatusFilter(newValue);
+    // setStatusFilter(newValue);
+    setSearchParams((prev) => {
+      prev.set("status", newValue);
+      return prev;
+    });
   };
 
   return (
@@ -35,10 +41,13 @@ function TodosFilter({
           <div className="filterSectionWrapper">
             <div className="nameFilterWrapper">
               <TextField
-                value={searchItem}
-                onChange={(ev) => {
-                  setSearchItem(ev.target.value);
-                }}
+                value={q}
+                onChange={(e) =>
+                  setSearchParams((prev) => {
+                    prev.set("q", e.target.value);
+                    return prev;
+                  })
+                }
                 label="Search Items..."
                 variant="standard"
               />
