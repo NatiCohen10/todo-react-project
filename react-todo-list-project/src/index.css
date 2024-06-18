@@ -73,7 +73,7 @@ ul {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 600px;
+  max-width: 900px;
 }
 
 .custom-checkbox + .custom-checkbox-label::before {
