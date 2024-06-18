@@ -135,39 +135,6 @@ function TodoPage() {
     return false;
   }
 
-  // async function addTodo(ev) {
-  //   try {
-  //     ev.preventDefault();
-  //     if (validateNewTodo()) {
-  //       buildSnackbar(
-  //         "error",
-  //         "please fill all of the required fields before adding a todo!"
-  //       );
-  //       return;
-  //     }
-  //     setAddingTodo(true);
-  //     const newTodo = {
-  //       title: addTodoInputRef.current.value,
-  //       description: addTodoDescRef.current.value,
-  //       isComplete: false,
-  //       labels: ["work", "study"],
-  //     };
-  //     await axios.post("http://localhost:8001/todo-items", newTodo);
-  //     setTodos((prevTodos) => {
-  //       return [...prevTodos, newTodo];
-  //     });
-  //     addTodoInputRef.current.value = "";
-  //     addTodoDescRef.current.value = "";
-  //     addTodoInputRef.current.focus();
-  //     setSelectedLabels([]);
-  //     buildSnackbar("success", "Todo Added Successfuly");
-  //   } catch (error) {
-  //     buildSnackbar("error", "couldn't connect to server! try again later");
-  //   } finally {
-  //     setAddingTodo(false);
-  //   }
-  // }
-
   const isCreating = location.pathname === "/todo/create";
 
   function handleCloseModal() {

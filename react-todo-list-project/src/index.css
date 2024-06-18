@@ -209,5 +209,5 @@ ul {
 }
 .individual-todo-title {
   display: flex;
-  gap: 5px;
+  justify-content: space-between;
 }

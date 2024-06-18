@@ -42,6 +42,7 @@ function TodoDetailsPage() {
   const [isEdit, setIsEdit] = useState(false);
   const [editedTodoTitle, setEditedTodoTitle] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const newTitleRef = useRef(null);
   const { todoId } = useParams();
   const navigate = useNavigate();
   const url = "http://localhost:8001/todo-items";
@@ -52,13 +53,16 @@ function TodoDetailsPage() {
         const todo = await axios.get(`${url}/${todoId}`);
         setTodo(todo.data);
         setEditedTodoTitle(todo.data.title);
-        console.log(todo.data);
       } catch (error) {
         console.error(error);
       }
     };
     fetchTodo();
   }, [todoId]);
+
+  useEffect(() => {
+    setEditedTodoTitle(editedTodoTitle);
+  }, [editedTodoTitle]);
 
   async function deleteTodo() {
     try {
@@ -82,11 +86,24 @@ function TodoDetailsPage() {
     setOpen(false);
   }
 
-  function editindividualTodo() {
-    isEdit ? setIsEdit(false) : setIsEdit(true);
-    console.log(todo.title);
+  function handleToggleEdit() {
+    setIsEdit((prev) => !prev);
   }
 
+  function editNewTitle() {
+    const newTodoTitle = newTitleRef.current.value;
+    console.log(newTodoTitle);
+    try {
+      axios.patch(`${url}/${todoId}`, { title: newTodoTitle });
+      setTodo((prevTodo) => {
+        return { ...prevTodo, title: newTodoTitle };
+      });
+      setEditedTodoTitle(newTodoTitle);
+      setIsEdit(false);
+    } catch (error) {
+      buildSnackbar("error", "couldn't connect to server, try again later");
+    }
+  }
   if (!todo) {
     return <div>Loading...</div>;
   }
@@ -120,21 +137,28 @@ function TodoDetailsPage() {
         >
           <div className="individual-todo-title">
             {!isEdit ? (
-              <Typography variant="h4" component="h2">
-                {todo.title}
-              </Typography>
+              <>
+                <Typography variant="h4" component="h2">
+                  {todo.title}
+                </Typography>
+                <Button onClick={() => handleToggleEdit()}>
+                  <EditIcon />
+                </Button>
+              </>
             ) : (
-              <TextField
-                value={editedTodoTitle}
-                onChange={(ev) => setEditedTodoTitle(ev.target.value)}
-                label="Todo Name"
-                sx={{ width: "100%" }}
-              />
+              <>
+                <TextField
+                  value={editedTodoTitle}
+                  onChange={(ev) => setEditedTodoTitle(ev.target.value)}
+                  label="Todo Name"
+                  inputRef={newTitleRef}
+                  sx={{ width: "100%" }}
+                />
+                <Button onClick={() => editNewTitle()}>
+                  <EditIcon />
+                </Button>
+              </>
             )}
-
-            <Button onClick={() => editindividualTodo()}>
-              <EditIcon />
-            </Button>
           </div>
           <Typography variant="body1" component="p">
             {todo.description}
@@ -178,3 +202,92 @@ function TodoDetailsPage() {
 }
 
 export default TodoDetailsPage;
+
+// import React, { useEffect, useRef, useState } from "react";
+// import { useParams } from "react-router-dom";
+// import { Button } from "@mui/material";
+// import EditIcon from "@mui/icons-material/Edit";
+// import SaveIcon from "@mui/icons-material/Save";
+// import axios from "axios";
+
+// const URL = "http://localhost:8001/data/";
+
+// function TodoDetailsPage() {
+//   const { todoId } = useParams();
+//   const [todoDetails, setTodoDetails] = useState({});
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [value, setValue] = useState("");
+//   const newTitle = useRef("");
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await fetch(URL + todoId);
+//         const result = await response.json();
+//         setTodoDetails(result);
+//         setValue(result.title);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     };
+
+//     fetchData();
+//   }, [todoId]);
+
+//   const handleToggleEdit = () => {
+//     setIsEditing((prev) => !prev);
+//   };
+
+//   const handleChange = (e) => {
+//     setValue(e.target.value);
+//   };
+
+//   const editTitle = async () => {
+//     const newTitleValue = newTitle.current.value;
+//     try {
+//       await axios.patch(URL + todoId, { title: newTitleValue });
+//       setTodoDetails((prevDetails) => ({
+//         ...prevDetails,
+//         title: newTitleValue,
+//       }));
+//       setValue(newTitleValue);
+//       setIsEditing(false);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   return (
+//     <div className="container-2">
+//       <div className="detail-container">
+//         <div className="top">
+//           {isEditing ? (
+//             <>
+//               <input
+//                 type="text"
+//                 value={value}
+//                 onChange={handleChange}
+//                 ref={newTitle}
+//                 autoFocus
+//               />
+//               <Button onClick={editTitle}>
+//                 <SaveIcon />
+//               </Button>
+//             </>
+//           ) : (
+//             <>
+//               <h1>{value}</h1>
+//               <Button onClick={handleToggleEdit}>
+//                 <EditIcon />
+//               </Button>
+//             </>
+//           )}
+//         </div>
+//         <p>Labels: {todoDetails.labels?.join(", ")}</p>
+//         <p>Description: {todoDetails.description}</p>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default TodoDetailsPage;
