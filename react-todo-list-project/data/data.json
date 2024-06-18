@@ -287,17 +287,6 @@
         "work",
         "study"
       ]
-    },
-    {
-      "id": "1402",
-      "title": "Do laundry",
-      "description": "45845646+584",
-      "isComplete": false,
-      "labels": [
-        "study",
-        "deployment",
-        "development"
-      ]
     }
   ]
 }
