@@ -98,6 +98,195 @@
         "work",
         "study"
       ]
+    },
+    {
+      "id": "7FGH8",
+      "title": "Refactor Codebase",
+      "description": "Improve the existing code structure for better readability and maintenance.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "development"
+      ]
+    },
+    {
+      "id": "2JKL3",
+      "title": "Review Pull Requests",
+      "description": "Provide feedback on pending pull requests in the repository.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "development"
+      ]
+    },
+    {
+      "id": "4MNO9",
+      "title": "Update Documentation",
+      "description": "Ensure all project documentation is up to date.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "study"
+      ]
+    },
+    {
+      "id": "5PQR2",
+      "title": "Plan Sprint",
+      "description": "Organize tasks and goals for the upcoming sprint.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "project"
+      ]
+    },
+    {
+      "id": "6STU5",
+      "title": "Optimize Performance",
+      "description": "Identify and fix performance bottlenecks in the application.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "development"
+      ]
+    },
+    {
+      "id": "8VWX1",
+      "title": "User Testing",
+      "description": "Conduct user testing sessions to gather feedback.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "testing"
+      ]
+    },
+    {
+      "id": "9YZ12",
+      "title": "Fix Bugs",
+      "description": "Identify and resolve bugs reported by users.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "development"
+      ]
+    },
+    {
+      "id": "1ABCD",
+      "title": "Learn Redux",
+      "description": "Study and implement Redux for state management.",
+      "isComplete": false,
+      "labels": [
+        "study",
+        "work"
+      ]
+    },
+    {
+      "id": "2EFGH",
+      "title": "Backend Integration",
+      "description": "Integrate the backend APIs with the frontend application.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "development"
+      ]
+    },
+    {
+      "id": "3IJKL",
+      "title": "Code Review",
+      "description": "Review the code changes made by the team.",
+      "isComplete": true,
+      "labels": [
+        "work",
+        "development"
+      ]
+    },
+    {
+      "id": "4MNOP",
+      "title": "Create Test Cases",
+      "description": "Design and create test cases for new features.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "testing"
+      ]
+    },
+    {
+      "id": "5QRST",
+      "title": "Write Blog Post",
+      "description": "Write a blog post about recent project experiences.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "project"
+      ]
+    },
+    {
+      "id": "6UVWX",
+      "title": "Attend Workshop",
+      "description": "Participate in an online workshop about advanced JavaScript.",
+      "isComplete": false,
+      "labels": [
+        "study",
+        "work"
+      ]
+    },
+    {
+      "id": "7YZAB",
+      "title": "Research New Technologies",
+      "description": "Research and document new technologies that can be used in projects.",
+      "isComplete": false,
+      "labels": [
+        "study"
+      ]
+    },
+    {
+      "id": "8CDEF",
+      "title": "Conduct Code Review",
+      "description": "Review code submissions from team members for quality assurance.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "development"
+      ]
+    },
+    {
+      "id": "9GHJK",
+      "title": "Design New Feature",
+      "description": "Brainstorm and design new features for the application.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "project"
+      ]
+    },
+    {
+      "id": "0LMNO",
+      "title": "Monitor Application",
+      "description": "Set up monitoring for the live application to track performance.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "deployment"
+      ]
+    },
+    {
+      "id": "1PQRS",
+      "title": "Organize Files",
+      "description": "Organize and clean up files and folders in the project directory.",
+      "isComplete": true,
+      "labels": [
+        "work",
+        "project"
+      ]
+    },
+    {
+      "id": "2TUVW",
+      "title": "Write Documentation",
+      "description": "Write comprehensive documentation for the new features added.",
+      "isComplete": false,
+      "labels": [
+        "work",
+        "study"
+      ]
     }
   ]
 }

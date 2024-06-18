@@ -177,6 +177,9 @@ function TodoDetailsPage() {
           <Typography variant="body1" component="p">
             {todo.description}
           </Typography>
+          <Typography variant="body1" component="p">
+            Status: {`${todo.isComplete ? "complete" : "active"}`}
+          </Typography>
           <Typography></Typography>
           <div>
             {todo.labels.map((label, index) => (
