@@ -52,7 +52,7 @@ function TodosFilter({ statusFilter, setSearchParams, q }) {
                 centered
               >
                 <Tab label="All Items" value="all" />
-                <Tab label="Active Todos" value="uncomplete" />
+                <Tab label="Active Todos" value="active" />
                 <Tab label="Complete Todos" value="complete" />
               </Tabs>
             </div>
