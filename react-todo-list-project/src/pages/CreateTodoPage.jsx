@@ -11,11 +11,11 @@ import {
   Snackbar,
   TextField,
   Tooltip,
-  chipClasses,
+  Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close"; // Import CloseIcon
+import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import ClassIcon from "@mui/icons-material/Class";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -23,6 +23,7 @@ import CodeIcon from "@mui/icons-material/Code";
 import UploadIcon from "@mui/icons-material/Upload";
 import QuizIcon from "@mui/icons-material/Quiz";
 import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
+import { useNavigate } from "react-router-dom";
 
 const labelIconArray = [
   { key: "study", label: "Study", icon: <ClassIcon /> },
@@ -37,24 +38,19 @@ const labelIconArray = [
   },
 ];
 
-function CreateTodoPage({
-  openDialog,
-  handleClose,
-  addTodoInputRef,
-  addTodoDescRef,
-  buildSnackbar,
-  validateNewTodo,
-  severity,
-  message,
-  open,
-}) {
+function CreateTodoPage() {
   const [chipArr, setChipArr] = useState([]);
+  const addTodoInputRef = useRef(null);
+  const addTodoDescRef = useRef(null);
+  const navigate = useNavigate();
+
+  function handleCloseModal() {
+    navigate(-1);
+  }
+
   async function handleAddTodo(ev) {
     ev.preventDefault();
     try {
-      if (validateNewTodo()) {
-        return;
-      }
       const newTodo = {
         title: addTodoInputRef.current.value,
         description: addTodoDescRef.current.value,
@@ -62,10 +58,10 @@ function CreateTodoPage({
         labels: chipArr,
       };
       await axios.post("http://localhost:8001/todo-items", newTodo);
-      buildSnackbar("success", "Todo Added Successfully");
-      handleClose();
+      handleCloseModal();
+      console.log("hi");
     } catch (error) {
-      buildSnackbar("error", "Couldn't connect to server! Try again later");
+      // buildSnackbar("error", "Couldn't connect to server! Try again later");
     }
   }
 
@@ -79,27 +75,12 @@ function CreateTodoPage({
 
   return (
     <>
-      <Snackbar
-        open={open}
-        autoHideDuration={2000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={severity}
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
-      <Dialog open={openDialog || false} onClose={handleClose}>
+      <Dialog open={true} onClose={handleCloseModal}>
         <DialogTitle>Create New Todo</DialogTitle>
         <DialogContent>
           <IconButton
             aria-label="close"
-            onClick={handleClose}
+            onClick={handleCloseModal}
             color="error"
             sx={{
               position: "absolute",
@@ -139,15 +120,15 @@ function CreateTodoPage({
                           marginRight: "0.5em",
                           marginBottom: "0.5em",
                           backgroundColor: chipArr.includes(item.key)
-                            ? "#1976d2" // Blue background color for selected chips
+                            ? "#1976d2"
                             : undefined,
                           color: chipArr.includes(item.key)
-                            ? "white" // White text color for selected chips
+                            ? "white"
                             : undefined,
                           "&:hover": {
                             backgroundColor: chipArr.includes(item.key)
                               ? "#1976d2"
-                              : "#e0e0e0", // Light gray background color on hover
+                              : "#e0e0e0",
                           },
                         }}
                       />

@@ -6,6 +6,7 @@ import TodoStatistics from "../components/TodoStatistics";
 import TodosFilter from "../components/TodosFilter";
 import { Alert, Button, IconButton, Snackbar, Typography } from "@mui/material";
 import {
+  Link,
   Outlet,
   useLocation,
   useNavigate,
@@ -20,8 +21,6 @@ function TodoPage() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState("");
   const [message, setMessage] = useState("");
-  const addTodoInputRef = useRef(null);
-  const addTodoDescRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -114,21 +113,8 @@ function TodoPage() {
     }
   }
 
-  function validateNewTodo() {
-    if (
-      addTodoInputRef.current.value.trim() === "" ||
-      addTodoDescRef.current.value === ""
-    ) {
-      return true;
-    }
-    return false;
-  }
-
   const isCreating = location.pathname === "/todo/create";
 
-  function handleCloseModal() {
-    navigate(-1);
-  }
   return (
     <>
       <Snackbar
@@ -152,9 +138,8 @@ function TodoPage() {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => {
-          navigate("/todo/create");
-        }}
+        component={Link}
+        to="/todo/create"
       >
         Add todo
       </Button>
@@ -177,22 +162,6 @@ function TodoPage() {
           error={error}
         />
       </>
-      {isCreating && (
-        <CreateTodoPage
-          openDialog={isCreating}
-          buildSnackbar={buildSnackbar}
-          handleClose={handleCloseModal}
-          validateNewTodo={validateNewTodo}
-          severity={severity}
-          setSeverity={setSeverity}
-          open={open}
-          setOpen={setOpen}
-          message={message}
-          setMessage={setMessage}
-          addTodoInputRef={addTodoInputRef}
-          addTodoDescRef={addTodoDescRef}
-        />
-      )}
       <Outlet />
     </>
   );
