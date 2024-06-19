@@ -12,7 +12,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import CreateTodoPage from "./CreateTodoPage";
+import useDebounce from "../custom-hooks/useDebounce";
 
 function TodoPage() {
   const [todos, setTodos] = useState([]);
@@ -30,6 +30,7 @@ function TodoPage() {
   });
   const q = searchParams.get("q");
   const statusFilter = searchParams.get("status");
+  const debounceQ = useDebounce(q, 700);
 
   useEffect(() => {
     fetchTodos();
@@ -37,10 +38,10 @@ function TodoPage() {
 
   const filteredTodos = useMemo(() => {
     let filtered = todos;
-    if (q?.trim() !== "") {
+    if (debounceQ?.trim() !== "") {
       filtered = filtered?.filter((todo) => {
-        if (!q) return filtered;
-        return todo.title?.toLowerCase().includes(q?.toLowerCase());
+        if (!debounceQ) return filtered;
+        return todo.title?.toLowerCase().includes(debounceQ?.toLowerCase());
       });
     }
 
@@ -50,7 +51,7 @@ function TodoPage() {
       );
     }
     return filtered;
-  }, [statusFilter, todos, q]);
+  }, [statusFilter, todos, debounceQ]);
 
   function handleClose(event, reason) {
     if (reason === "clickaway") {

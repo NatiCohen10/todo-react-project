@@ -287,6 +287,16 @@
         "work",
         "study"
       ]
+    },
+    {
+      "id": "49bf",
+      "title": "Fix implementation of add todo page",
+      "description": "the CreateTodoPage was implemented uncorrectly, fix the implementation",
+      "isComplete": false,
+      "labels": [
+        "study",
+        "work"
+      ]
     }
   ]
 }
